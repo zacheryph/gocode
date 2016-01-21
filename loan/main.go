@@ -6,6 +6,13 @@ import (
 	"math"
 )
 
+// Money lets is print money numbers pretty
+type Money float64
+
+func (m Money) String() string {
+	return fmt.Sprintf("$%.2f", m)
+}
+
 var (
 	amount   = flag.Float64("amount", 0.0, "loan amount")
 	interest = flag.Float64("rate", 0.0, "interest rate")
@@ -22,12 +29,12 @@ func main() {
 	discount := calculateDiscount(*interest/100, *months)
 	payment := *amount / discount
 
-	fmt.Printf("Monthly Payment: $%.2f\n", payment)
+	fmt.Println("Monthly Payment:", Money(payment))
 
 	periodic := (*interest / 100) / 12
 	interestPayment := *amount * periodic
-	fmt.Printf("First Interest Payment: $%.2f\n", interestPayment)
-	fmt.Printf("First Principal Payment: $%.2f\n", payment-interestPayment)
+	fmt.Println("First Interest Payment: $%.2f\n", Money(interestPayment))
+	fmt.Println("First Principal Payment: $%.2f\n", Money(payment-interestPayment))
 
 }
 
