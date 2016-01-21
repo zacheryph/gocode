@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"math"
+	"os"
+	"text/tabwriter"
 )
 
 // Money lets is print money numbers pretty
@@ -17,6 +19,7 @@ var (
 	amount   = flag.Float64("amount", 0.0, "loan amount")
 	interest = flag.Float64("rate", 0.0, "interest rate")
 	months   = flag.Int("months", 360, "length of the loan (360 = 30 years)")
+	table    = flag.Bool("table", false, "print amortization table")
 )
 
 func main() {
@@ -26,20 +29,45 @@ func main() {
 		return
 	}
 
-	discount := calculateDiscount(*interest/100, *months)
-	payment := *amount / discount
+	if *table {
+		printAmortizationTable()
+	} else {
+		periodic := (*interest / 100) / 12
+		discount := calculateDiscount(*interest / 100)
+		payment := *amount / discount
+		interestPayment := *amount * periodic
 
-	fmt.Println("Monthly Payment:", Money(payment))
-
-	periodic := (*interest / 100) / 12
-	interestPayment := *amount * periodic
-	fmt.Println("First Interest Payment: $%.2f\n", Money(interestPayment))
-	fmt.Println("First Principal Payment: $%.2f\n", Money(payment-interestPayment))
-
+		fmt.Println("Monthly Payment:", Money(payment))
+		fmt.Println("First Interest Payment:", Money(interestPayment))
+		fmt.Println("First Principal Payment:", Money(payment-interestPayment))
+	}
 }
 
-func calculateDiscount(interest float64, months int) float64 {
+func calculateDiscount(interest float64) float64 {
 	periodic := interest / 12
 	daily := math.Pow(periodic+1, 360)
 	return (daily - 1) / (periodic * daily)
+}
+
+func printAmortizationTable() {
+	periodic := (*interest / 100) / 12
+	discount := calculateDiscount(*interest / 100)
+	balance := *amount
+	payment := balance / discount
+	writer := tabwriter.NewWriter(os.Stdout, 0, 8, 2, '\t', 0)
+	headers := "Opening\tPayment\tInterest\tPrincipal\tEnding\n"
+	writer.Write([]byte(headers))
+
+	for period := 1; period <= *months; period++ {
+		interestPayment := balance * periodic
+		principalPayment := payment - interestPayment
+		line := fmt.Sprintf("%s\t%s\t%s\t%s\t%s\n",
+			Money(balance), Money(payment), Money(interestPayment),
+			Money(principalPayment), Money(balance-principalPayment))
+
+		writer.Write([]byte(line))
+		balance -= principalPayment
+	}
+
+	writer.Flush()
 }
