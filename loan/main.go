@@ -6,13 +6,6 @@ import (
 	"math"
 )
 
-//
-// http://banking.about.com/od/loans/a/loan_payment_calculations.htm
-// - payment = amount / discount
-// - periodic_interest = interest / 12
-// - discount = (((1 + interest) ^payments ) - 1) / (interest(1 + interest)^payments)
-//  {[ (1 + i) ^n] - 1} / [i(1 + i)^n]
-
 var (
 	amount   = flag.Float64("amount", 0.0, "loan amount")
 	interest = flag.Float64("rate", 0.0, "interest rate")
