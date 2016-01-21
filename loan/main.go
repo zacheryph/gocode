@@ -60,7 +60,7 @@ func printAmortizationTable() {
 		monthlyPayment = balance / discount
 	}
 
-	headers := "Opening\tPayment\tInterest\tPrincipal\tEnding\n"
+	headers := "Period\tOpening\tPayment\tInterest\tPrincipal\tEnding\n"
 	writer.Write([]byte(headers))
 
 	for period := 1; period <= *months && balance > 0; period++ {
@@ -72,7 +72,7 @@ func printAmortizationTable() {
 			monthlyPayment = interestPayment + principalPayment
 		}
 
-		line := fmt.Sprintf("%s\t%s\t%s\t%s\t%s\n",
+		line := fmt.Sprintf("%d\t%s\t%s\t%s\t%s\t%s\n", period,
 			Money(balance), Money(monthlyPayment), Money(interestPayment),
 			Money(principalPayment), Money(balance-principalPayment))
 
