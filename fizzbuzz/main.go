@@ -1,22 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
+
+// FizzBuzz is fizz buzz magic
+type FizzBuzz int
+
+func (fb FizzBuzz) String() (res string) {
+	if fb%3 == 0 {
+		res += "Fizz"
+	}
+	if fb%5 == 0 {
+		res += "Buzz"
+	}
+	if res == "" {
+		res = strconv.Itoa(int(fb))
+	}
+	return
+}
 
 func main() {
-	for i := 1; i <= 100; i++ {
-		str := ""
+	var i FizzBuzz
 
-		if i%3 == 0 {
-			str += "Fizz"
-		}
-		if i%5 == 0 {
-			str += "Buzz"
-		}
-
-		if str == "" {
-			fmt.Println(i)
-		} else {
-			fmt.Println(str)
-		}
+	for i = 1; i <= 100; i++ {
+		fmt.Println(i)
 	}
 }
