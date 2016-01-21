@@ -20,6 +20,7 @@ var (
 	interest = flag.Float64("rate", 0.0, "interest rate")
 	months   = flag.Int("months", 360, "length of the loan (360 = 30 years)")
 	table    = flag.Bool("table", false, "print amortization table")
+	payment  = flag.Float64("payment", 0.0, "override the payment amount")
 )
 
 func main() {
@@ -53,16 +54,26 @@ func printAmortizationTable() {
 	periodic := (*interest / 100) / 12
 	discount := calculateDiscount(*interest/100, *months)
 	balance := *amount
-	payment := balance / discount
 	writer := tabwriter.NewWriter(os.Stdout, 0, 8, 2, '\t', 0)
+	monthlyPayment := *payment
+	if monthlyPayment == 0 {
+		monthlyPayment = balance / discount
+	}
+
 	headers := "Opening\tPayment\tInterest\tPrincipal\tEnding\n"
 	writer.Write([]byte(headers))
 
-	for period := 1; period <= *months; period++ {
+	for period := 1; period <= *months && balance > 0; period++ {
 		interestPayment := balance * periodic
-		principalPayment := payment - interestPayment
+		principalPayment := monthlyPayment - interestPayment
+
+		if principalPayment > balance {
+			principalPayment = balance
+			monthlyPayment = interestPayment + principalPayment
+		}
+
 		line := fmt.Sprintf("%s\t%s\t%s\t%s\t%s\n",
-			Money(balance), Money(payment), Money(interestPayment),
+			Money(balance), Money(monthlyPayment), Money(interestPayment),
 			Money(principalPayment), Money(balance-principalPayment))
 
 		writer.Write([]byte(line))
