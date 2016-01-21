@@ -33,7 +33,7 @@ func main() {
 		printAmortizationTable()
 	} else {
 		periodic := (*interest / 100) / 12
-		discount := calculateDiscount(*interest / 100)
+		discount := calculateDiscount(*interest/100, *months)
 		payment := *amount / discount
 		interestPayment := *amount * periodic
 
@@ -43,15 +43,15 @@ func main() {
 	}
 }
 
-func calculateDiscount(interest float64) float64 {
+func calculateDiscount(interest float64, months int) float64 {
 	periodic := interest / 12
-	daily := math.Pow(periodic+1, 360)
+	daily := math.Pow(periodic+1, float64(months))
 	return (daily - 1) / (periodic * daily)
 }
 
 func printAmortizationTable() {
 	periodic := (*interest / 100) / 12
-	discount := calculateDiscount(*interest / 100)
+	discount := calculateDiscount(*interest/100, *months)
 	balance := *amount
 	payment := balance / discount
 	writer := tabwriter.NewWriter(os.Stdout, 0, 8, 2, '\t', 0)
