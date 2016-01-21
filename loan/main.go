@@ -51,6 +51,8 @@ func calculateDiscount(interest float64, months int) float64 {
 }
 
 func printAmortizationTable() {
+	var totalInterest float64
+
 	periodic := (*interest / 100) / 12
 	discount := calculateDiscount(*interest/100, *months)
 	balance := *amount
@@ -76,9 +78,17 @@ func printAmortizationTable() {
 			Money(balance), Money(monthlyPayment), Money(interestPayment),
 			Money(principalPayment), Money(balance-principalPayment))
 
+		totalInterest += interestPayment
+
 		writer.Write([]byte(line))
 		balance -= principalPayment
 	}
 
+	writer.Flush()
+
+	writer = tabwriter.NewWriter(os.Stdout, 0, 8, 2, '\t', 0)
+	writer.Write([]byte(fmt.Sprintf("Principal\t%s\n", Money(*amount))))
+	writer.Write([]byte(fmt.Sprintf("Total Interest\t%s\n", Money(totalInterest))))
+	writer.Write([]byte(fmt.Sprintf("Total Payments\t%s\n", Money(*amount+totalInterest))))
 	writer.Flush()
 }
