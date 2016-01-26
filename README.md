@@ -3,6 +3,12 @@
 General repository for examples, PoC's, small pieces of code that don't deserve
 a repository of their own.
 
+## cipher
+
+Simple Ceaser and Vigenete ciphers.
+
+* http://mango.computer/posts/2016/01/26/The-Cryptographic-Challenge/
+
 ## fizzbuzz
 
 Not much explaination needed here.  I doubt it will be touched again.
