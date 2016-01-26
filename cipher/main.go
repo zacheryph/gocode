@@ -13,8 +13,9 @@ const (
 )
 
 var (
-	shift = flag.Int("shift", 0, "shift parameter for Ceaser Cipher")
-	key   = flag.String("key", "", "keyword for Vigenere Cipher")
+	shift   = flag.Int("shift", 0, "shift parameter for Ceaser Cipher")
+	key     = flag.String("key", "", "keyword for Vigenere Cipher")
+	decrypt = flag.Bool("decrypt", false, "Decrypt an encrypted string. Default is Encrypt")
 )
 
 func abort(msg string) {
@@ -42,6 +43,10 @@ func main() {
 
 	var res string
 	if *shift > 0 {
+		if *decrypt {
+			*shift = 26 - *shift
+		}
+
 		res = ceaserCipher(input)
 	} else {
 		res = vigeneteCipher(input)
