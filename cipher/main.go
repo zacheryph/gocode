@@ -51,18 +51,22 @@ func main() {
 	fmt.Println(res)
 }
 
+func ceaserRune(char rune, shift int) rune {
+	cipher := Alphabet[shift:]
+	if char < 'A' || char > 'Z' {
+		return ' '
+	}
+
+	return rune(cipher[int(char)-'A'])
+}
+
 func ceaserCipher(input string) string {
-	cipher := Alphabet[*shift:]
 	result := ""
 
 	for _, char := range input {
-		if char < 'A' || char > 'Z' {
-			result += " "
-			continue
-		}
-
-		result += string(cipher[int(char-'A')])
+		result += string(ceaserRune(char, *shift))
 	}
+
 	return result
 }
 
