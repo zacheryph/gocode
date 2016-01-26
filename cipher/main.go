@@ -51,11 +51,15 @@ func main() {
 
 		res = ceaserCipher(input)
 	} else {
-		res = vigeneteCipher(input)
+		res = vigenereCipher(input)
 	}
 
 	fmt.Println("Response:")
 	fmt.Println(res)
+}
+
+func runeToShift(l rune) int {
+	return int(l) - 'A'
 }
 
 func ceaserRune(char rune, shift int) rune {
@@ -77,6 +81,19 @@ func ceaserCipher(input string) string {
 	return result
 }
 
-func vigeneteCipher(r string) string {
-	return "Vigenete: Not Implemented"
+func vigenereCipher(input string) string {
+	result := ""
+	keyLen := len(*key)
+
+	for idx, char := range input {
+		shift := runeToShift(rune((*key)[idx%keyLen]))
+
+		if *decrypt {
+			shift = 26 - shift
+		}
+
+		result += string(ceaserRune(char, shift))
+	}
+
+	return result
 }
