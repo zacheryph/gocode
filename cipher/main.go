@@ -9,7 +9,7 @@ import (
 
 const (
 	// Alphabet soup for decoding
-	Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXY"
+	Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 )
 
 var (
@@ -52,12 +52,12 @@ func main() {
 }
 
 func ceaserRune(char rune, shift int) rune {
-	cipher := Alphabet[shift:]
 	if char < 'A' || char > 'Z' {
 		return ' '
 	}
 
-	return rune(cipher[int(char)-'A'])
+	offset := (int(char) + shift - 'A') % 26
+	return rune(Alphabet[offset])
 }
 
 func ceaserCipher(input string) string {
