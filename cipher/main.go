@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 )
 
 const (
@@ -40,6 +41,7 @@ func main() {
 		fmt.Println("Failed to read input:", err)
 		return
 	}
+	input = strings.ToUpper(input)
 
 	var res string
 	if *shift > 0 {
