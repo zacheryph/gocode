@@ -34,7 +34,7 @@ func (c *Vigenere) Write(p []byte) (n int, err error) {
 			shift = 26 - shift
 		}
 
-		res += string(ceaserRune(char, shift))
+		res += string(caeserRune(char, shift))
 	}
 	return c.dst.Write([]byte(res))
 }

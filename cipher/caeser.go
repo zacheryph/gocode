@@ -7,13 +7,13 @@ const (
 	Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 )
 
-// Ceaser the czar of ciphers
-type Ceaser struct {
+// Caeser the czar of ciphers
+type Caeser struct {
 	Shift int
 	dst   io.Writer
 }
 
-func ceaserRune(char rune, shift int) rune {
+func caeserRune(char rune, shift int) rune {
 	if char < 'A' || char > 'Z' {
 		return ' '
 	}
@@ -22,22 +22,22 @@ func ceaserRune(char rune, shift int) rune {
 	return rune(Alphabet[offset])
 }
 
-// NewCeaser gives us a new ceaser cipher writer
-func NewCeaser(dst io.Writer, shift int, decrypt bool) *Ceaser {
+// NewCaeser gives us a new caeser cipher writer
+func NewCaeser(dst io.Writer, shift int, decrypt bool) *Caeser {
 	if decrypt {
 		shift = 26 - shift
 	}
 
-	return &Ceaser{
+	return &Caeser{
 		Shift: shift,
 		dst:   dst,
 	}
 }
 
-func (c *Ceaser) Write(p []byte) (n int, err error) {
+func (c *Caeser) Write(p []byte) (n int, err error) {
 	res := ""
 	for _, char := range string(p) {
-		res += string(ceaserRune(char, c.Shift))
+		res += string(caeserRune(char, c.Shift))
 	}
 	return c.dst.Write([]byte(res))
 }

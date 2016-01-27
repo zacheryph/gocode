@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	shift   = flag.Int("shift", 0, "shift parameter for Ceaser Cipher")
+	shift   = flag.Int("shift", 0, "shift parameter for Caeser Cipher")
 	key     = flag.String("key", "", "keyword for Vigenere Cipher")
 	decrypt = flag.Bool("decrypt", false, "Decrypt an encrypted string. Default is Encrypt")
 )
@@ -22,7 +22,7 @@ func abort(msg string) {
 func main() {
 	flag.Parse()
 	if *shift == 0 && *key == "" {
-		abort("Must give -shift (ceaser) or -key (vigenere) flag")
+		abort("Must give -shift (caeser) or -key (vigenere) flag")
 	}
 
 	if *shift < 0 || *shift > 25 {
@@ -32,7 +32,7 @@ func main() {
 	fmt.Println("Response:")
 	var cipher io.Writer
 	if *shift > 0 {
-		cipher = NewCeaser(os.Stdout, *shift, *decrypt)
+		cipher = NewCaeser(os.Stdout, *shift, *decrypt)
 	} else {
 		cipher = NewVigenere(os.Stdout, *key, *decrypt)
 	}

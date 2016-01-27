@@ -5,7 +5,7 @@ a repository of their own.
 
 ## cipher
 
-Simple Ceaser and Vigenete ciphers.
+Simple Caeser and Vigenere ciphers.
 
 * http://mango.computer/posts/2016/01/26/The-Cryptographic-Challenge/
 
