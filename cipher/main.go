@@ -1,16 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
+	"io"
 	"os"
-	"strings"
-)
-
-const (
-	// Alphabet soup for decoding
-	Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 )
 
 var (
@@ -35,65 +29,14 @@ func main() {
 		abort("-shift option must range between 1 and 25")
 	}
 
-	reader := bufio.NewReader(os.Stdin)
-	input, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Println("Failed to read input:", err)
-		return
-	}
-	input = strings.ToUpper(input)
-
-	var res string
-	if *shift > 0 {
-		if *decrypt {
-			*shift = 26 - *shift
-		}
-
-		res = ceaserCipher(input)
-	} else {
-		res = vigenereCipher(input)
-	}
-
 	fmt.Println("Response:")
-	fmt.Println(res)
-}
-
-func runeToShift(l rune) int {
-	return int(l) - 'A'
-}
-
-func ceaserRune(char rune, shift int) rune {
-	if char < 'A' || char > 'Z' {
-		return ' '
+	var cipher io.Writer
+	if *shift > 0 {
+		cipher = NewCeaser(os.Stdout, *shift, *decrypt)
+	} else {
+		cipher = NewVigenere(os.Stdout, *key, *decrypt)
 	}
 
-	offset := (int(char) + shift - 'A') % 26
-	return rune(Alphabet[offset])
-}
-
-func ceaserCipher(input string) string {
-	result := ""
-
-	for _, char := range input {
-		result += string(ceaserRune(char, *shift))
-	}
-
-	return result
-}
-
-func vigenereCipher(input string) string {
-	result := ""
-	keyLen := len(*key)
-
-	for idx, char := range input {
-		shift := runeToShift(rune((*key)[idx%keyLen]))
-
-		if *decrypt {
-			shift = 26 - shift
-		}
-
-		result += string(ceaserRune(char, shift))
-	}
-
-	return result
+	io.Copy(cipher, os.Stdin)
+	fmt.Println("")
 }
