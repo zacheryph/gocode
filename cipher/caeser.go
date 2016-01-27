@@ -2,11 +2,6 @@ package main
 
 import "io"
 
-const (
-	// Alphabet soup for decoding
-	Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-)
-
 // Caeser the czar of ciphers
 type Caeser struct {
 	Shift int
@@ -18,8 +13,7 @@ func caeserRune(char rune, shift int) rune {
 		return ' '
 	}
 
-	offset := (int(char) + shift - 'A') % 26
-	return rune(Alphabet[offset])
+	return 'A' + ((char + rune(shift) - 'A') % 26)
 }
 
 // NewCaeser gives us a new caeser cipher writer
