@@ -52,9 +52,9 @@ func main() {
 	})
 
 	if *add {
-		addRsvp(db, *name, *email)
+		addRsvp(*name, *email)
 	} else if *list {
-		listRsvp(db)
+		listRsvp()
 		// } else if *http != "" {
 		// 	httpServer()
 	}
