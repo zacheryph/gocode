@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
+	"io"
 	"text/tabwriter"
 
 	"github.com/boltdb/bolt"
@@ -58,8 +58,8 @@ func addRsvp(name, email string) {
 	fmt.Println("Successfully added RSVP")
 }
 
-	wr := tabwriter.NewWriter(os.Stdout, 0, 4, 4, ' ', 0)
-func listRsvp() {
+func listRsvp(out io.Writer) {
+	wr := tabwriter.NewWriter(out, 0, 4, 4, ' ', 0)
 	wr.Write([]byte("Name\tEmail\n"))
 
 	db.View(func(tx *bolt.Tx) error {

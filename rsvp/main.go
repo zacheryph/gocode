@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 
 	"github.com/boltdb/bolt"
 )
@@ -54,7 +55,7 @@ func main() {
 	if *add {
 		addRsvp(*name, *email)
 	} else if *list {
-		listRsvp()
+		listRsvp(os.Stdout)
 		// } else if *http != "" {
 		// 	httpServer()
 	}
