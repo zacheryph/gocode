@@ -11,20 +11,22 @@ import (
 const bucketName = "rsvps"
 
 var (
-	db     *bolt.DB
-	dbFile = flag.String("db", "./rsvp.boltdb", "database file")
-	add    = flag.Bool("add", false, "add an rsvp to the database")
-	list   = flag.Bool("list", false, "list rsvp's in the database")
-	http   = flag.String("http", "", "start http server ([host]:port)")
-	name   = flag.String("name", "", "name of person to add to database")
-	email  = flag.String("email", "", "email of person to add to database")
+	db *bolt.DB
+
+	dbFile   = flag.String("db", "./rsvp.boltdb", "database file")
+	add      = flag.Bool("add", false, "add an rsvp to the database")
+	list     = flag.Bool("list", false, "list rsvp's in the database")
+	name     = flag.String("name", "", "name of person to add to database")
+	email    = flag.String("email", "", "email of person to add to database")
+	httpServ = flag.String("http", "", "start http server ([host]:port)")
+	rootDir  = flag.String("root", "./", "root directory for http server")
 )
 
 func main() {
 	var err error
 
 	flag.Parse()
-	if !*add && !*list && *http == "" {
+	if !*add && !*list && *httpServ == "" {
 		fmt.Println("Error: one of the following must be given: -add, -list, -http")
 		flag.Usage()
 		return
@@ -58,7 +60,7 @@ func main() {
 		}
 	} else if *list {
 		listRsvp(os.Stdout)
-		// } else if *http != "" {
-		// 	httpServer()
+	} else if *httpServ != "" {
+		echoServer()
 	}
 }
