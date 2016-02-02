@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/boltdb/bolt"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -22,6 +24,7 @@ func echoServer() {
 	admin := e.Group("/rsvp")
 	admin.Use(middleware.BasicAuth(checkAuth))
 	admin.Get("/list", requestListRsvp)
+	admin.Get("/backup", requestBoltBackup)
 
 	e.Static("/", *rootDir)
 
@@ -55,4 +58,21 @@ func requestListRsvp(c *echo.Context) error {
 	res.Header().Add("Content-Type", "text/plain")
 	listRsvp(res)
 	return nil
+}
+
+func requestBoltBackup(c *echo.Context) error {
+	w := c.Response()
+
+	err := db.View(func(tx *bolt.Tx) error {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Header().Set("Content-Disposition", `attachment; filename="rsvp.boltdb"`)
+		w.Header().Set("Content-Length", strconv.Itoa(int(tx.Size())))
+		_, err := tx.WriteTo(w)
+		return err
+	})
+
+	if err != nil {
+		c.String(http.StatusInternalServerError, err.Error())
+	}
+	return err
 }
