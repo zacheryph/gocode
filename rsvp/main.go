@@ -53,7 +53,9 @@ func main() {
 	})
 
 	if *add {
-		addRsvp(*name, *email)
+		if err := addRsvp(*name, *email); err != nil {
+			fmt.Println("Failed to add RSVP:", err)
+		}
 	} else if *list {
 		listRsvp(os.Stdout)
 		// } else if *http != "" {

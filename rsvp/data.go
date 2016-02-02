@@ -24,7 +24,7 @@ func itob(v uint64) []byte {
 	return b
 }
 
-func addRsvp(name, email string) {
+func addRsvp(name, email string) error {
 	err := db.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(bucketName))
 		if bucket == nil {
@@ -52,10 +52,11 @@ func addRsvp(name, email string) {
 
 	if err != nil {
 		fmt.Println("Failed to add RSVP:", err)
-		return
+		return err
 	}
 
 	fmt.Println("Successfully added RSVP")
+	return nil
 }
 
 func listRsvp(out io.Writer) {
