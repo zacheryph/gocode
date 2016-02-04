@@ -6,6 +6,10 @@ rsvp/rsvp
 # Other files
 rsvp/rsvp.boltdb
 
+
+# Created by https://www.gitignore.io/api/go
+
+### Go ###
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a
