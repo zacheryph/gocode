@@ -56,7 +56,7 @@ func printAmortizationTable() {
 	periodic := (*interest / 100) / 12
 	discount := calculateDiscount(*interest/100, *months)
 	balance := *amount
-	writer := tabwriter.NewWriter(os.Stdout, 0, 8, 2, '\t', 0)
+	writer := tabwriter.NewWriter(os.Stdout, 0, 8, 2, ' ', 0)
 	monthlyPayment := *payment
 	if monthlyPayment == 0 {
 		monthlyPayment = balance / discount
