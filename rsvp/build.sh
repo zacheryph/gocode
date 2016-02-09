@@ -7,15 +7,19 @@ _build() {
     -v ${PWD}:$container_path \
     -w $container_path \
     golang:1.5.3 \
-      go build -v
+      ./build.sh build
 }
 
 case "${1:-default}" in
   default)
     _build
     ;;
-  build)
+  docker-build)
     _build
+    ;;
+  build)
+    go get -d .
+    go build -a -v
     ;;
   vet)
     go vet
