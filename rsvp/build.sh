@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 _build() {
-  container_path=/usr/src/rsvp
+  container_path=/go/src/rsvp
 
   docker run --rm \
     -v ${PWD}:$container_path \
