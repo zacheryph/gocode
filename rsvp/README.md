@@ -49,7 +49,7 @@ RSVP is able to run a web server, giving the user endpoints for handling the rsv
 Using the `-http` and optional `-root` options will start the http server.  Docker support
 is included to run the rsvp server in a container.
 
-bq. `rsvp -http=:6060 -root /path/to/web/content`
+> `rsvp -http=:6060 -root /path/to/web/content`
 
 ### Endpoints
 
