@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM golang:1.5.3
 MAINTAINER zacheryph@gmail.com
 
 COPY rsvp /bin/
