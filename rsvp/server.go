@@ -54,9 +54,9 @@ func requestAddRsvp(c *echo.Context) error {
 }
 
 func requestListRsvp(c *echo.Context) error {
-	res := c.Response()
-	res.Header().Add("Content-Type", "text/plain")
-	listRsvp(res)
+	w := c.Response()
+	w.Header().Add("Content-Type", "text/plain")
+	listRsvp(w)
 	return nil
 }
 
