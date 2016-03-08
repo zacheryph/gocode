@@ -7,15 +7,17 @@ import (
 	"fmt"
 	"io"
 	"text/tabwriter"
+	"time"
 
 	"github.com/boltdb/bolt"
 )
 
 // Rsvp defines the reservation to encode for the database
 type Rsvp struct {
-	ID    uint64
-	Name  string
-	Email string
+	ID      uint64
+	Name    string
+	Email   string
+	Created time.Time
 }
 
 func itob(v uint64) []byte {
@@ -38,7 +40,7 @@ func addRsvp(name, email string) error {
 			return err
 		}
 
-		rsvp := Rsvp{nextID, name, email}
+		rsvp := Rsvp{nextID, name, email, time.Now()}
 		data, err := json.Marshal(rsvp)
 		if err != nil {
 			fmt.Println("Failed to marshal rsvp:", err)
@@ -61,7 +63,7 @@ func addRsvp(name, email string) error {
 
 func listRsvp(out io.Writer) {
 	wr := tabwriter.NewWriter(out, 0, 4, 4, ' ', 0)
-	wr.Write([]byte("Name\tEmail\n"))
+	wr.Write([]byte("Name\tEmail\tRSVPed At\n"))
 
 	db.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(bucketName))
@@ -78,7 +80,7 @@ func listRsvp(out io.Writer) {
 				return err
 			}
 
-			line := fmt.Sprintf("%s\t%s\n", rsvp.Name, rsvp.Email)
+			line := fmt.Sprintf("%s\t%s\t%s\n", rsvp.Name, rsvp.Email, rsvp.Created.Format(time.RFC1123))
 			wr.Write([]byte(line))
 
 			return nil
