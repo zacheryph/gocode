@@ -12,6 +12,9 @@ import (
 	"github.com/boltdb/bolt"
 )
 
+// TimeFormat formats time how we want it
+const TimeFormat = "Mon Jan _2 15:04 MST"
+
 // Rsvp defines the reservation to encode for the database
 type Rsvp struct {
 	ID      uint64
@@ -80,7 +83,9 @@ func listRsvp(out io.Writer) {
 				return err
 			}
 
-			line := fmt.Sprintf("%s\t%s\t%s\n", rsvp.Name, rsvp.Email, rsvp.Created.Format(time.RFC1123))
+			tz, _ := time.LoadLocation("America/Chicago")
+			ts := rsvp.Created.In(tz)
+			line := fmt.Sprintf("%s\t%s\t%s\n", rsvp.Name, rsvp.Email, ts.Format(TimeFormat))
 			wr.Write([]byte(line))
 
 			return nil
