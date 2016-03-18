@@ -22,21 +22,26 @@ var (
 	rootDir  = flag.String("root", "./", "root directory for http server")
 )
 
-func main() {
-	var err error
-
+func parseArguments() {
 	flag.Parse()
+
 	if !*add && !*list && *httpServ == "" {
 		fmt.Println("Error: one of the following must be given: -add, -list, -http")
 		flag.Usage()
-		return
+		os.Exit(1)
 	}
 
 	if *add && (*name == "" || *email == "") {
 		fmt.Println("Error: both name and email must be given for adding to the database")
 		flag.Usage()
-		return
+		os.Exit(1)
 	}
+}
+
+func main() {
+	var err error
+
+	parseArguments()
 
 	db, err = bolt.Open(*dbFile, 0600, nil)
 	if err != nil {
