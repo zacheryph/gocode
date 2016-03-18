@@ -7,8 +7,9 @@ import (
 	"time"
 
 	"github.com/boltdb/bolt"
-	echo "gopkg.in/labstack/echo.v1"
-	"gopkg.in/labstack/echo.v1/middleware"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/engine/standard"
+	"github.com/labstack/echo/middleware"
 )
 
 var saveSuccess = `<html><head>
@@ -20,24 +21,24 @@ var saveSuccess = `<html><head>
 func echoServer() {
 	e := echo.New()
 	e.Use(middleware.Logger())
-	e.Post("/rsvp", requestAddRsvp)
+	e.Post("/rsvp", echo.HandlerFunc(requestAddRsvp))
 
 	admin := e.Group("/rsvp")
 	admin.Use(middleware.BasicAuth(checkAuth))
-	admin.Get("/list", requestListRsvp)
-	admin.Get("/backup", requestBoltBackup)
+	admin.Get("/list", echo.HandlerFunc(requestListRsvp))
+	admin.Get("/backup", echo.HandlerFunc(requestBoltBackup))
 
 	e.Static("/", *rootDir)
 
 	fmt.Println("Starting Server:", *httpServ)
-	e.Run(*httpServ)
+	e.Run(standard.New(*httpServ))
 }
 
 func checkAuth(user, passwd string) bool {
 	return true
 }
 
-func requestAddRsvp(c *echo.Context) error {
+func requestAddRsvp(c echo.Context) error {
 	name := c.Form("name")
 	email := c.Form("email")
 	res := c.Form("response")
@@ -56,14 +57,14 @@ func requestAddRsvp(c *echo.Context) error {
 	return nil
 }
 
-func requestListRsvp(c *echo.Context) error {
+func requestListRsvp(c echo.Context) error {
 	w := c.Response()
 	w.Header().Add("Content-Type", "text/plain")
 	listRsvp(w)
 	return nil
 }
 
-func requestBoltBackup(c *echo.Context) error {
+func requestBoltBackup(c echo.Context) error {
 	w := c.Response()
 
 	err := db.View(func(tx *bolt.Tx) error {
