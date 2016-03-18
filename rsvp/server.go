@@ -40,6 +40,7 @@ func checkAuth(user, passwd string) bool {
 func requestAddRsvp(c *echo.Context) error {
 	name := c.Form("name")
 	email := c.Form("email")
+	res := c.Form("response")
 	if name == "" || email == "" {
 		c.String(http.StatusBadRequest, "Name and Email must be given. Please go back and try again.")
 		return nil

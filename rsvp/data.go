@@ -17,10 +17,11 @@ const TimeFormat = "Mon Jan _2 15:04 MST"
 
 // Rsvp defines the reservation to encode for the database
 type Rsvp struct {
-	ID      uint64
-	Name    string
-	Email   string
-	Created time.Time
+	ID       uint64
+	Name     string
+	Email    string
+	Response string
+	Created  time.Time
 }
 
 func itob(v uint64) []byte {
@@ -66,7 +67,7 @@ func addRsvp(rsvp Rsvp) error {
 
 func listRsvp(out io.Writer) {
 	wr := tabwriter.NewWriter(out, 0, 4, 4, ' ', 0)
-	wr.Write([]byte("Name\tEmail\tRSVPed At\n"))
+	wr.Write([]byte("Name\tEmail\tRSVPed At\tResponse\n"))
 
 	db.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(bucketName))
@@ -85,7 +86,8 @@ func listRsvp(out io.Writer) {
 
 			tz, _ := time.LoadLocation("America/Chicago")
 			ts := rsvp.Created.In(tz)
-			line := fmt.Sprintf("%s\t%s\t%s\n", rsvp.Name, rsvp.Email, ts.Format(TimeFormat))
+			line := fmt.Sprintf("%s\t%s\t%s\t%s\n", rsvp.Name, rsvp.Email,
+				ts.Format(TimeFormat), rsvp.Response)
 			wr.Write([]byte(line))
 
 			return nil

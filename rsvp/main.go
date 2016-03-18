@@ -19,6 +19,7 @@ var (
 	list     = flag.Bool("list", false, "list rsvp's in the database")
 	name     = flag.String("name", "", "name of person to add to database")
 	email    = flag.String("email", "", "email of person to add to database")
+	response = flag.String("response", "coming", "the persons response")
 	httpServ = flag.String("http", "", "start http server ([host]:port)")
 	rootDir  = flag.String("root", "./", "root directory for http server")
 )
