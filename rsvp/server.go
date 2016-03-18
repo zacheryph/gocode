@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/boltdb/bolt"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	echo "gopkg.in/labstack/echo.v1"
+	"gopkg.in/labstack/echo.v1/middleware"
 )
 
 var saveSuccess = `<html><head>
