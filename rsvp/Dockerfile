@@ -1,4 +1,4 @@
-FROM golang:1.5.3
+FROM golang:1.6
 MAINTAINER zacheryph@gmail.com
 
 COPY rsvp /bin/
