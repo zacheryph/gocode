@@ -29,7 +29,7 @@ func itob(v uint64) []byte {
 	return b
 }
 
-func addRsvp(name, email string) error {
+func addRsvp(rsvp Rsvp) error {
 	err := db.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(bucketName))
 		if bucket == nil {
@@ -43,7 +43,7 @@ func addRsvp(name, email string) error {
 			return err
 		}
 
-		rsvp := Rsvp{nextID, name, email, time.Now()}
+		rsvp.ID = nextID
 		data, err := json.Marshal(rsvp)
 		if err != nil {
 			fmt.Println("Failed to marshal rsvp:", err)

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/boltdb/bolt"
 	"github.com/labstack/echo"
@@ -44,7 +45,8 @@ func requestAddRsvp(c *echo.Context) error {
 		return nil
 	}
 
-	if err := addRsvp(name, email); err != nil {
+	rsvp := Rsvp{0, name, email, res, time.Now()}
+	if err := addRsvp(rsvp); err != nil {
 		c.String(http.StatusInternalServerError,
 			"Failed to add RSVP at this time. Please try again later")
 	}

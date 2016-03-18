@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/boltdb/bolt"
 )
@@ -60,7 +61,8 @@ func main() {
 	})
 
 	if *add {
-		if err := addRsvp(*name, *email); err != nil {
+		rsvp := Rsvp{0, *name, *email, *response, time.Now()}
+		if err := addRsvp(rsvp); err != nil {
 			fmt.Println("Failed to add RSVP:", err)
 		}
 	} else if *list {
