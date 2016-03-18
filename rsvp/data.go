@@ -45,6 +45,10 @@ func addRsvp(rsvp Rsvp) error {
 		}
 
 		rsvp.ID = nextID
+		if rsvp.Response == "" {
+			rsvp.Response = "coming"
+		}
+
 		data, err := json.Marshal(rsvp)
 		if err != nil {
 			fmt.Println("Failed to marshal rsvp:", err)
