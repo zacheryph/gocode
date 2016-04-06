@@ -1,0 +1,8 @@
+package: zro.net/go/code/rsvp
+import:
+- package: github.com/boltdb/bolt
+- package: github.com/labstack/echo
+  subpackages:
+  - engine/standard
+  - middleware
+- package: ./...
