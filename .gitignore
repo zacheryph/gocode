@@ -1,4 +1,6 @@
 # Our binaries from building
+cgotest/cgotest
+cgotest/dynlib.h
 fizzbuzz/fizzbuzz
 loan/loan
 rsvp/rsvp
