@@ -7,7 +7,11 @@ void cEntryPoint() {
   struct group grp = {};
   char *buf = malloc(256);
 
-  passingGrpBuffer(&grp, buf, 256);
+  int err;
+  if (passingGrpBuffer(&grp, buf, 256, &err) < 0) {
+    printf("error %d\n", err);
+    return;
+  }
   printf("grp.gr_name:   %s\n", grp.gr_name);
   printf("grp.gr_passwd: %s\n", grp.gr_passwd);
   printf("grp.gr_gid:    %d\n", grp.gr_gid);
