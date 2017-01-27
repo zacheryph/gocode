@@ -40,7 +40,7 @@ func main() {
 	}
 	c := Config{}
 
-	err = hcl.Decode(&c, string(d))
+	err = hcl.Unmarshal(d, &c)
 	if err != nil {
 		fmt.Println("HCL", err)
 		return
